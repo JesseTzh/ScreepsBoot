@@ -26,7 +26,7 @@ function shutDown() {
 //系统运作
 function work() {
 
-    Game.creeps["Harvester"].work();
+    //Game.creeps["Harvester"].work();
 
 }
 

@@ -5,6 +5,7 @@
  *
  */
 const logger = require('utils.log').getLogger("roomData");
+const CreepsData = require('creepData');
 
 class RoomData {
     constructor() {
@@ -27,9 +28,11 @@ class RoomData {
         //房间内的Factory
         this.factory = "";
         // TODO 增加房间Creep数量
+        //this.harvesterList = new Array();
     }
 
     initData(roomName) {
+        // TODO 优化函数返回值
         this.name = roomName;
         const claimRoom = Game.rooms[this.name];
         if (!claimRoom) {
@@ -152,6 +155,8 @@ class RoomData {
             return null;
         }
     }
+
+
 
 }
 

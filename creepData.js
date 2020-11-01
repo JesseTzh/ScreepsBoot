@@ -12,35 +12,23 @@
  */
 const logger = require('utils.log').getLogger("creepData");
 
-class RoomData {
+class CreepData {
     constructor() {
-        //房间名称
-        this.name = "";
-        //Harvester名称列表
-        this.harvesterList = new Array();
-        //Upgrader列表
-        this.upgraderList = new Array();
-        //Mover列表
-        this.MoverList = new Array();
-        //房间内所有creep列表
-        this.allCreepList = new Array();
+        //生成方式，默认"Auto"自适应生成
+        this.generateMode = "";
+        //部件配置
+        this.partsSet = new Array();
+        //出生点
+        this.spawnName = "";
+        //出生房间
+        this.roomName = "";
     }
 
-    initData(roomName) {
-        this.name = roomName;
-        const claimRoom = Game.rooms[this.name];
-        if (!claimRoom) {
-            logger.error("丢失房间[" + roomName + "]视野!");
-            // TODO 考量数据库刷新逻辑以确定是否要在此处改变刷新标识
-            //global.database.creepDataFlag = false;
-        }
-        this.sourceList = this._getSourceList(claimRoom);
+    initData(creepName, room) {
 
-        //合并所有list方便统一遍历
-        this.allCreepList = this.allCreepList.concat(this.harvesterList).concat(this.upgraderList).concat(this.MoverList)
         return this;
     }
 
 }
 
-module.exports = RoomData;
+module.exports = CreepData;
