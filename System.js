@@ -19,7 +19,7 @@ function boot() {
 //系统关闭
 function end() {
     // TODO 添加能量短缺计数器
-    //logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
+    logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
     //Game.cpu.generatePixel();
 }
 
@@ -32,6 +32,6 @@ function work() {
 
 module.exports = {
     boot: boot,
-    shutDown: shutDown,
+    end: end,
     work: work
 }

@@ -13,7 +13,9 @@
 const logger = require('utils.log').getLogger("creepData");
 
 class CreepData {
-    constructor() {
+    constructor(name) {
+        //Creep名称
+        this.name = name;
         //生成方式，默认"Auto"自适应生成
         this.generateMode = "";
         //部件配置
@@ -22,6 +24,8 @@ class CreepData {
         this.spawnName = "";
         //出生房间
         this.roomName = "";
+        //Creep工种
+        this.type = "";
     }
 
     initData(creepName, room) {
