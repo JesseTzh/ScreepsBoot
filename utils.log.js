@@ -71,6 +71,7 @@ class Logger {
     }
 
     creepLog(creep, action, code) {
+        // TODO 增加creep当前所执行的方法以方便调试
         const message = `${creep}在${creep.room}执行任务[${action}]时出错,错误代码:[${code}]`;
         this._log("INFO ", message);
     }
