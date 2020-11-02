@@ -9,6 +9,6 @@ module.exports.loop = function () {
     System.work();
 
     //执行统计监控、发送邮件等次要任务
-    System.shutDown();
+    System.end();
 
 }

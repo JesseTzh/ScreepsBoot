@@ -17,7 +17,7 @@ function boot() {
 }
 
 //系统关闭
-function shutDown() {
+function end() {
     // TODO 添加能量短缺计数器
     //logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
     //Game.cpu.generatePixel();
