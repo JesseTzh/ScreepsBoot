@@ -1,37 +1,36 @@
 # ScreepsBoot
 
-#### 介绍
-全新重构的Screeps代码，旨在尽量实现自适应执行与任务驱动的设计架构
 
-#### 软件架构
-软件架构说明
+## 介绍
 
+全新重构的Screeps代码，旨在尽量实现自适应执行与任务驱动的设计架构。
 
-#### 安装教程
+## 架构设计
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+在运行逻辑上，本项目以 System 为入口，划分为三大模块，分别为：
 
-#### 使用说明
+1. System.boot(）
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+   ​	负责统筹规划事宜，包括数据库的创建与修改、定时任务安排与触发以及复杂任务的下发等等。
 
-#### 参与贡献
+2. System.work()
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+   ​	游戏内真正活动的主要处理模块，所有的 Creep 与建筑自身的运行逻辑均在本模块执行。
 
+3. System.end()
 
-#### 特技
+   ​	主要进行一些次要的监视与收尾工作，例如调试所用的能量矿监测工具，以及将本tick内的警告信息以邮件形式发送。
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+## 特色模块
+
+1.  Log 模块
+
+一个简单易用的 Log 调试工具，在[Log]的基础上增加了一些快速输出的便利性方法，方便快速定位问题。
+
+2. Database 模块
+
+用于管理游戏中非持久性数据，例如房间、建筑、creep缓存队列等等。并在某种程度上相当于传统项目中的持久层框架，提供了访问 global 中所有数据的接口，以尽量减少直接操作缓存数据，提高系统的可读性与易维护性。
+
+3. CreepTemple 模块
+
+根据实时的房间能量状况生成 Creep 模板，正在规划重构。

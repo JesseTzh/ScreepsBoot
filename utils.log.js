@@ -20,6 +20,8 @@ class Logger {
         this.name = "";
     }
 
+    // TODO  尝试适配配置文件来对某个Creep进行自动调试输出
+
     static getLogger(name) {
         let logger = new Logger();
         logger.name = name;
