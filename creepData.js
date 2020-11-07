@@ -10,13 +10,13 @@
  * Mover     |   0   |   0   |   1   |
  * -------------------------------------
  */
-const logger = require('utils.log').getLogger("creepData");
+const logger = require('Log').getLogger("creepData");
 
 class CreepData {
     constructor(name) {
         //Creep名称
         this.name = name;
-        //生成方式，默认"Auto"自适应生成
+        //生成方式
         this.generateMode = "";
         //部件配置
         this.partsSet = new Array();
@@ -25,11 +25,17 @@ class CreepData {
         //出生房间
         this.roomName = "";
         //Creep工种
-        this.type = "";
+        this.role = "";
     }
 
-    initData(creepName, room) {
-
+    initData(creepName, creepRole, generateMode, roomName) {
+        this.name = creepName;
+        this.role = creepRole;
+        this.generateMode = generateMode;
+        this.roomName = roomName;
+        if (generateMode === "config") {
+            // TODO 从 config.creep.template中获取预设的部件配置
+        }
         return this;
     }
 

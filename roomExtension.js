@@ -1,4 +1,4 @@
-const logger = require('utils.log').getLogger("Room_Extension");
+const logger = require('Log').getLogger("Room_Extension");
 
 //自定义的 Room 的拓展
 const roomExtension = {

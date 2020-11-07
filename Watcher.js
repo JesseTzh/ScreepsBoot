@@ -1,5 +1,5 @@
 const CONFIG = require('config');
-const logger = require('utils.log').getLogger("Watcher");
+const logger = require('Log').getLogger("Watcher");
 const Observer = require('Construction_Observer');
 
 function beginWatch() {

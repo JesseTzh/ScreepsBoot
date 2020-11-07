@@ -1,7 +1,8 @@
 // 引入 creep 配置项
-const logger = require('utils.log').getLogger("creep");
+const logger = require('Log').getLogger("creep");
 // 引入 creep 角色模板
 const roleConfig = require('creepRole')
+const Database = require('Database');
 
 // 自定义的 Creep 的拓展
 const creepExtension = {
@@ -12,7 +13,7 @@ const creepExtension = {
         }
         // TODO 检查 creep 是否还在数据库中
         // 获取对应配置项
-        const creepConfig = roleConfig["Harvester"];
+        const creepConfig = roleConfig[this.getCreepData().role];
         // 获取是否工作
         const working = creepConfig.switch ? creepConfig.switch(this) : true;
         // 执行对应操作
@@ -214,6 +215,9 @@ const creepExtension = {
         // if (result === ERR_NOT_ENOUGH_ENERGY) {
         //     return true;
         // }
+    },
+    getCreepData() {
+        return Database.getCreepData(this.name);
     }
 }
 

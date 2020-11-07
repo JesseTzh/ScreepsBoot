@@ -7,7 +7,7 @@
  *      RoomData：以每个房间为单位存储了所有房间的建筑数据
  *      CreepData：以每个 Creep 为单位存储了所有 Creep 的相关数据
  */
-const logger = require('utils.log').getLogger("Database");
+const logger = require('Log').getLogger("Database");
 const RoomData = require('roomData');
 const CreepData = require('creepData');
 
@@ -41,24 +41,14 @@ class Database {
     initCreepData() {
         logger.info("正在初始化Creep库...");
 
-        let creepDataMap = new Map();
         for (let roomName of Database.getRoomArray()) {
             let room = Game.rooms[roomName];
             if (!room) {
                 logger.warn(`房间${roomName}丢失视野，请及时检查！`)
                 // TODO 邮件提醒以及考量是否需要重置数据库
             }
-            let harvesterList = this._getHarvesterList(room);
-            for (let harvestName in harvesterList) {
-
-
-                //creepDataMap.set(harvestName, roomData);
-            }
-
-
+            this._getHarvesterList(room);
         }
-
-        global.database.creepData = creepDataMap;
         Database.setCreepDataFlag(true);
     }
 
@@ -71,7 +61,7 @@ class Database {
                 roomArray.push(roomName)
             }
         }
-        global.database.roomArray = roomArray
+        global.database.roomArray = roomArray;
         //获取各房间数据
         let roomDataMap = new Map();
         for (let claimRoomName of global.database.roomArray) {
@@ -87,12 +77,12 @@ class Database {
     }
 
     _getHarvesterList(room) {
-        const creepRole = "Harvester";
+        let creepDataMap = new Map();
         const roomLevel = room.controller.level;
         //根据房间等级生成的 Harvester 数量
         let harvesterNum;
         //Harvester 生成方式
-        let harvesterGenerateMode;
+        var harvesterGenerateMode;
         switch (true) {
             case roomLevel <= 3:
                 harvesterNum = 6;
@@ -109,11 +99,11 @@ class Database {
         }
         while (harvesterNum > 0) {
             let harvesterName = `Harvester-${room.name}-${harvesterNum}`;
-            let harvestData = new CreepData().initData(harvesterName);
-            logger.info(harvestData);
-
+            let harvestData = new CreepData().initData(harvesterName,"Harvester", harvesterGenerateMode, room.name);
+            creepDataMap.set(harvesterName, harvestData);
             harvesterNum--;
         }
+        global.database.creepData = creepDataMap;
     }
 
     static getRoomArray() {
@@ -126,6 +116,10 @@ class Database {
 
     static setRoomDataFlag(flag) {
         global.database.roomDataFlag = flag;
+    }
+
+    static getCreepData(name){
+        return global.database.creepData.get(name);
     }
 
 }

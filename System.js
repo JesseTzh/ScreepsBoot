@@ -1,8 +1,9 @@
-const logger = require('utils.log').getLogger("System");
+const logger = require('Log').getLogger("System");
 const ExtensionLoader = require('ExtensionLoader');
 const DataCleaner = require('DataCleaner');
 const Timer = require('Timer');
 const Database = require('Database');
+const creepManager = require('creepManager');
 
 //系统启动
 function boot() {
@@ -14,6 +15,8 @@ function boot() {
     Database.checkDatabaseFlag();
     //计时器开始运作检查本tick工作
     Timer();
+    //Creep管理
+    creepManager.creepManager();
 }
 
 //系统关闭
@@ -25,9 +28,9 @@ function end() {
 
 //系统运作
 function work() {
-
-    //Game.creeps["Harvester"].work();
-
+    for (let name in Game.creeps) {
+        Game.creeps[name].work();
+    }
 }
 
 module.exports = {

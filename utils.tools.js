@@ -1,4 +1,4 @@
-const logger = require('utils.log').getLogger("util.tools");
+const logger = require('Log').getLogger("util.tools");
 const SYS_CONFIG = require('config.system.setting');
 const CONFIG = require('config')
 

@@ -1,4 +1,4 @@
-const logger = require('utils.log').getLogger("Harvester");
+const logger = require('Log').getLogger("Harvester");
 const SYS_CONFIG = require('config.system.setting');
 
 module.exports = ({

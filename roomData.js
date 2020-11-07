@@ -4,7 +4,7 @@
  *     const roomData = new RoomData().initData(claimRoomName);
  *
  */
-const logger = require('utils.log').getLogger("roomData");
+const logger = require('Log').getLogger("roomData");
 const CreepsData = require('creepData');
 
 class RoomData {

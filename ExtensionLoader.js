@@ -1,6 +1,6 @@
 const loadCreepExtension = require('creepExtension');
 const loadRoomExtension  = require('roomExtension');
-const logger = require('utils.log').getLogger("ExtensionLoader");
+const logger = require('Log').getLogger("ExtensionLoader");
 
 function load() {
     logger.info("正在挂载原型扩展...");

@@ -1,4 +1,4 @@
-const logger = require('utils.log').getLogger("Timer");
+const logger = require('Log').getLogger("Timer");
 const Database = require('Database');
 
 function checkTimerStatus(){
