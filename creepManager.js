@@ -4,7 +4,7 @@ const Database = require('Database');
 function creepManager() {
     //存储本 Tick 内正忙的 Spawn
     let spawnBusyList = new Set();
-    for (let [name, creepData] of global.database.creepData) {
+    for (let [name, creepData] of Database.getCreepData()) {
         if (!Game.creeps[name]) {
             //检查重生标记
             if (checkCreepRebornFlag(name)) {
@@ -20,9 +20,8 @@ function creepManager() {
             // }
             if (room.energyAvailable >= 300) {
                 //初始化模板
-                const creepTemplate = require('creepTemplateGenerate').genTemplate(creepTemplateConfig.roomName);
+                const creepTemplate = require('creepTemplateGenerator').genTemplate(creepTemplateConfig.roomName);
                 const template = creepTemplate.getTemplate(creepTemplateConfig);
-                logger.info(template)
                 let result = Game.spawns[room.getFreeSpawn().name].spawnCreep(template, name);
                 if (result === ERR_NOT_ENOUGH_ENERGY) {
                     spawnBusyList.add(creepTemplateConfig.spawnName);
@@ -75,7 +74,7 @@ function tryAdaptionReborn(name, creepTemplateConfig) {
             //     //不能使用自适应模板生成的Creep
             //     logger.warn(name + "不能使用自适应模板生成，跳过重生！");
             // }
-            let tempTemplate = require('creepTemplateGenerate').genTemplate(room.name).getSelfAdaptionTemplate();
+            let tempTemplate = require('creepTemplateGenerator').genTemplate(room.name).getSelfAdaptionTemplate();
             const result = Game.spawns[creepTemplateConfig.spawnName].spawnCreep(tempTemplate, name);
             if (result === OK) {
                 let message = name + "长时间重生失败，使用自适应模板......";
@@ -94,7 +93,7 @@ function tryAdaptionReborn(name, creepTemplateConfig) {
 function isMover(name, creepTemplateConfig) {
     let flag = false;
     if (name.search("Mover") !== -1) {
-        let template = require('creepTemplateGenerate').genTemplate(creepTemplateConfig.roomName).getMoverSelfAdaptionTemplate();
+        let template = require('creepTemplateGenerator').genTemplate(creepTemplateConfig.roomName).getMoverSelfAdaptionTemplate();
         const result = Game.spawns[creepTemplateConfig.spawnName].spawnCreep(template, name);
         if (result === OK) {
             let message = `[${name}]已使用自适应模板重生！\n,自适应模板为：${template}`;

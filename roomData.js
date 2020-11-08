@@ -29,6 +29,7 @@ class RoomData {
         this.factory = "";
         // TODO 增加房间Creep数量
         //this.harvesterList = new Array();
+        // TODO 增加全屋取能顺序列表
     }
 
     initData(roomName) {
@@ -39,6 +40,7 @@ class RoomData {
             logger.error("无法获取房间[" + roomName + "]对应信息!");
         }
         this.sourceList = this._getSourceList(claimRoom);
+        // TODO 根据等级判断是否初始化对应数据
         this.sourceLinkList = this._getSourceLinkList();
         if (this.sourceList.length != this.sourceLinkList.length) {
             logger.warn("房间[" + roomName + "]中的Source与Link无法一一对应!");

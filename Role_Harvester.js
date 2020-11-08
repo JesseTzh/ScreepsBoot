@@ -4,6 +4,7 @@ const SYS_CONFIG = require('config.system.setting');
 module.exports = ({
     // 采集能量矿
     source: creep => {
+        // TODO 完善采集目标安排方式
         creep.room.memory.Harvester != 0 ? creep.room.memory.Harvester = 0 : creep.room.memory.Harvester = 1;
         let source = Game.getObjectById(creep.room.getSourceList()[creep.room.memory.Harvester]);
         // TODO 判断当前能源点刷新时间较长且另一矿还有很多剩余再进行切换

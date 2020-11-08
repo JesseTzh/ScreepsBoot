@@ -1,44 +1,45 @@
 const logger = require('Log').getLogger("Room_Extension");
+const Database = require('Database');
 
 //自定义的 Room 的拓展
 const roomExtension = {
     getSourceList() {
-        return global.database.roomData.get(this.name).sourceList;
+        return Database.getRoomData(this.name).sourceList;
     },
     getSourceLinkList() {
-        return global.database.roomData.get(this.name).sourceLinkList;
+        return Database.getRoomData(this.name).sourceLinkList;
     },
     getTowerList() {
-        return global.database.roomData.get(this.name).towerList;
+        return Database.getRoomData(this.name).towerList;
     },
     getControllerLink() {
-        return global.database.roomData.get(this.name).controllerLink;
+        return Database.getRoomData(this.name).controllerLink;
     },
     getSpawnList() {
-        return global.database.roomData.get(this.name).spawnList;
+        return Database.getRoomData(this.name).spawnList;
     },
     getFreeSpawn() {
-        for (let spawnId of global.database.roomData.get(this.name).spawnList){
+        for (let spawnId of Database.getRoomData(this.name).spawnList) {
             let freeSpawn = Game.getObjectById(spawnId);
-            if(!freeSpawn.spawning){
+            if (!freeSpawn.spawning) {
                 return freeSpawn;
             }
         }
     },
     getExtensionList() {
-        return global.database.roomData.get(this.name).extensionList;
+        return Database.getRoomData(this.name).extensionList;
     },
     getFactory() {
-        return global.database.roomData.get(this.name).factory;
+        return Database.getRoomData(this.name).factory;
     },
     getMineral() {
-        return global.database.roomData.get(this.name).mineral;
+        return Database.getRoomData(this.name).mineral;
     },
     getRatioOfEnergy() {
         return this.energyAvailable / this.energyCapacityAvailable;
     },
-    factory: function (){
-        return global.database.roomData.get(this.name).factory;
+    factory: function () {
+        return Database.getRoomData(this.name).factory;
     }
 }
 
