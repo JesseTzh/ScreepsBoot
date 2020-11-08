@@ -26,6 +26,8 @@ class CreepData {
         this.roomName = "";
         //Creep工种
         this.role = "";
+        //Creep在本房间的编号，便于指派任务
+        this.num = "";
     }
 
     initData(creepName, creepRole, generateMode, roomName) {
@@ -36,6 +38,7 @@ class CreepData {
         if (generateMode === "config") {
             // TODO 从 config.creep.template中获取预设的部件配置
         }
+        this.num = creepName.substr(creepName.length-1,1);
         return this;
     }
 

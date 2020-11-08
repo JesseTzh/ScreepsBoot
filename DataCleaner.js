@@ -19,7 +19,7 @@ function cleanCreepMemory() {
         return;
     }
     for (let name in Memory.creeps) {
-        if (!(name in Database.getCreepData())) {
+        if (! Database.getCreepData().has(name)) {
             delete Memory.creeps[name];
             logger.debug('删除不存在的Creep记录:', name);
         }

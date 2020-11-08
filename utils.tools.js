@@ -1,6 +1,6 @@
 const logger = require('Log').getLogger("util.tools");
 const SYS_CONFIG = require('config.system.setting');
-const CONFIG = require('config')
+const Database = require('Database');
 
 //监测房间可用能量是否短缺，并在长时间处于短缺状态时报警
 function roomEnergAlertyMonitor() {
@@ -18,9 +18,9 @@ function roomEnergAlertyMonitor() {
             if (energyStatus >= SYS_CONFIG.ENERGY_SHORTAGE.RATIO) {
                 roomCountNum = 0;
             } else {
-                roomCountNum ++;
+                roomCountNum++;
             }
-            if(roomCountNum >= SYS_CONFIG.ENERGY_SHORTAGE.COUNTNUM){
+            if (roomCountNum >= SYS_CONFIG.ENERGY_SHORTAGE.COUNTNUM) {
                 let message = `房间[${roomName}]超过${SYS_CONFIG.ENERGY_SHORTAGE.COUNTNUM}tick能量比例低于${SYS_CONFIG.ENERGY_SHORTAGE.RATIO},请及时检查！`;
                 Game.notify(message);
                 logger.info(message);
@@ -60,9 +60,23 @@ function sendEmail() {
     }
 }
 
+function test() {
+    let newMap = new Map();
+    // for (let [name, creepTemplateConfig] of Database.getCreepData()) {
+    //     logger.info(name)
+    //     newMap.set(name, creepTemplateConfig);
+    // }
+    // logger.info("------")
+    // for (let [name, creepTemplateConfig] of newMap) {
+    //     logger.info(name)
+    // }
+
+}
+
 module.exports = {
     roomEnergAlertyMonitor: roomEnergAlertyMonitor,
     energySourceMonitor: energySourceMonitor,
     getType: getType,
-    sendEmail: sendEmail
+    sendEmail: sendEmail,
+    test: test
 };

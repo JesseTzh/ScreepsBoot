@@ -1,18 +1,18 @@
-const CONFIG = require('config');
 const logger = require('Log').getLogger("Watcher");
-const Observer = require('Construction_Observer');
+const Database = require('Database');
 
 function beginWatch() {
     // const cpuUsedBefore = Game.cpu.getUsed();
 
     // 监测外矿房间敌人
-    defenseOuterRoom();
+    //defenseOuterRoom();
     // 监测Mine是否刷新
-    mineMonitor();
+    //mineMonitor();
+
     // 监测领地房间是否有建筑工地
     constructionSiteMonitor();
     // 监测房间资源状况并下发生产任务
-    checkIndustryTask();
+    //checkIndustryTask();
 
     //监测者探测外界房间
     //observer();
@@ -20,7 +20,7 @@ function beginWatch() {
     // logger.info("守望者CPU用量：" + cpuUsed)
 
     //定时发送邮件报告房间能量情况
-    gameStatusReport();
+    //gameStatusReport();
 }
 
 function defenseOuterRoom() {
@@ -89,34 +89,32 @@ function constructionSiteMonitor() {
     if (!CONFIG.ROOMS_BUILDER) {
         return
     }
-    for (let roomName in CONFIG.ROOMS_BUILDER) {
+    for (let roomName in Database.getRoomArray()) {
+        const room = Game.rooms[roomName];
         // TODO 添加房间过滤器，以实现对于不同房间的操控
         //首先检测内存中是否有对应建造者记录（起码出生过一次）
-        if (Memory.creeps[CONFIG.ROOMS_BUILDER[roomName][0]]) {
+        if (Memory.creeps[global.database.roomData.get(roomName).builder]) {
             let builderFlag = "No";
-            if (Game.rooms[roomName].storage) {
-                const roomStorageEnergy = Game.rooms[roomName].storage.store.getUsedCapacity(RESOURCE_ENERGY);
+            if ((room.storage && room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 10000) || room.getRatioOfEnergy() === 1) {
                 // 房间 Storage 中储存有能量
-                if (roomStorageEnergy > 10000) {
-                    const constructionSite = Game.rooms[roomName].find(FIND_MY_CONSTRUCTION_SITES);
-                    // 房间内有建筑工地，则允许建造者重生
-                    if (constructionSite.length > 0) {
-                        builderFlag = "Yes";
-                    } else {
-                        //如果有待修建的城墙等等，也允许重生
-                        const repairConstruction = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                            filter: (structure) => {
-                                return (structure.structureType === STRUCTURE_WALL || structure.structureType === STRUCTURE_RAMPART) &&
-                                    structure.hits / structure.hitsMax <= 0.01;
-                            }
-                        })
-                        if (repairConstruction.length > 0) {
-                            //builderFlag = "Yes";
+                const constructionSite = room.find(FIND_MY_CONSTRUCTION_SITES);
+                // 房间内有建筑工地，则允许建造者重生
+                if (constructionSite.length > 0) {
+                    builderFlag = "Yes";
+                } else {
+                    //如果有待修建的城墙等等，也允许重生
+                    const repairConstruction = room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType === STRUCTURE_WALL || structure.structureType === STRUCTURE_RAMPART) &&
+                                structure.hits / structure.hitsMax <= 0.01;
                         }
+                    })
+                    if (repairConstruction.length > 0) {
+                        //builderFlag = "Yes";
                     }
                 }
             }
-            Memory.creeps[CONFIG.ROOMS_BUILDER[roomName][0]].RebornFlag = builderFlag;
+            Memory.creeps[global.database.roomData.get(roomName).builder].RebornFlag = builderFlag;
         }
     }
 }

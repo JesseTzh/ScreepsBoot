@@ -3,26 +3,27 @@ const Database = require('Database');
 
 function creepManager() {
     //存储本 Tick 内正忙的 Spawn
+    // TODO 重写判断是否有空闲 Spawn 方法
     let spawnBusyList = new Set();
-    for (let [name, creepData] of Database.getCreepData()) {
+    for (let [name, creepTemplateConfig] of Database.getCreepData()) {
         if (!Game.creeps[name]) {
             //检查重生标记
             if (checkCreepRebornFlag(name)) {
                 continue;
             }
-            //获取对应模板文件
-            let creepTemplateConfig = Database.getCreepData(name);
             const room = Game.rooms[creepTemplateConfig.roomName];
-            //判断 Creep所用Spawn是否正忙
-            // if (spawnBusyList.has(creepTemplateConfig.spawnName)) {
-            //     logger.info("[" + creepTemplateConfig.spawnName + "]正忙，无法重生 [" + name + "]");
-            //     continue;
-            // }
+
             if (room.energyAvailable >= 300) {
                 //初始化模板
                 const creepTemplate = require('creepTemplateGenerator').genTemplate(creepTemplateConfig.roomName);
                 const template = creepTemplate.getTemplate(creepTemplateConfig);
-                let result = Game.spawns[room.getFreeSpawn().name].spawnCreep(template, name);
+                const spawnName = room.getFreeSpawn().name;
+                //判断 Creep所用Spawn是否正忙
+                if (spawnBusyList.has(spawnName)) {
+                    logger.info("[" + spawnName + "]正忙，无法重生 [" + name + "]");
+                    continue;
+                }
+                let result = Game.spawns[spawnName].spawnCreep(template, name);
                 if (result === ERR_NOT_ENOUGH_ENERGY) {
                     spawnBusyList.add(creepTemplateConfig.spawnName);
                     //尝试使用自适应模板重生
@@ -31,14 +32,13 @@ function creepManager() {
                     logger.info('正在重生 : ' + name);
                     //重生失败计数归零
                     Memory.creeps[name].RebornFailTimes = 0;
-                    spawnBusyList.add(creepTemplateConfig.spawnName);
+                    spawnBusyList.add(spawnName);
                 } else if (result === ERR_BUSY) {
                     logger.info("[" + name + "]重生失败，Spawn[" + creepTemplateConfig.spawnName + "]正忙！");
                     const freeSpawn = Game.rooms[creepTemplateConfig.roomName].getFreeSpawn();
                     if (freeSpawn) {
                         Game.spawns[freeSpawn.name].spawnCreep(template, name);
                     }
-                    spawnBusyList.add(creepTemplateConfig.spawnName);
                 } else {
                     logger.warn("[" + name + "]重生失败！错误代码：" + result);
                 }

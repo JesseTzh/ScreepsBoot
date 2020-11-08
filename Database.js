@@ -15,7 +15,7 @@ const creepDataGenerator = require('creepDataGenerator');
 class Database {
 
     static checkDatabaseFlag(creepName, room) {
-        if (!global.database) {
+        if (!Database.checkDatabaseStatus()) {
             global.database = new Map();
         }
         if (!global.database.roomDataFlag) {
@@ -28,14 +28,16 @@ class Database {
 
     initCreepData() {
         logger.info("正在初始化Creep库...");
+        let creepDataList = new Map();
         for (let roomName of Database.getRoomArray()) {
             let room = Game.rooms[roomName];
             if (!room) {
                 logger.warn(`房间${roomName}丢失视野，请及时检查！`)
                 // TODO 邮件提醒以及考量是否需要重置数据库
             }
-            Database.setCreepData(creepDataGenerator.generate(room));
+            creepDataList = creepDataGenerator.generate(room, creepDataList);
         }
+        Database.setCreepData(creepDataList);
         Database.setCreepDataFlag(true);
     }
 

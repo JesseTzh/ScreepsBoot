@@ -1,9 +1,11 @@
 const logger = require('Log').getLogger("System");
+const constructionTower = require('Construction_Tower');
 const ExtensionLoader = require('ExtensionLoader');
 const DataCleaner = require('DataCleaner');
 const Timer = require('Timer');
 const Database = require('Database');
 const creepManager = require('creepManager');
+const tool = require('utils.tools');
 
 //系统启动
 function boot() {
@@ -22,6 +24,7 @@ function boot() {
 //系统关闭
 function end() {
     // TODO 添加能量短缺计数器
+    tool.test();
     logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
     //Game.cpu.generatePixel();
 }
@@ -31,6 +34,7 @@ function work() {
     for (let name in Game.creeps) {
         Game.creeps[name].work();
     }
+    constructionTower.towerWork();
 }
 
 module.exports = {

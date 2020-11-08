@@ -10,40 +10,78 @@
 const logger = require('Log').getLogger("creepDataGenerator");
 const CreepData = require('creepData');
 
-function generate(room) {
-    return getHarvesterList(room);
+function generate(room, creepDataList) {
+    creepDataList = getHarvesterList(room, creepDataList);
+    creepDataList = getUpgraderList(room, creepDataList);
+    creepDataList = getBuilderList(room, creepDataList)
+    return creepDataList;
 }
 
-function getHarvesterList(room) {
-    let creepDataMap = new Map();
+function getHarvesterList(room, creepDataList) {
     const roomLevel = room.controller.level;
     //根据房间等级生成的 Harvester 数量
     let harvesterNum;
     //Harvester 生成方式
-    var harvesterGenerateMode;
+    let generateMode;
     switch (true) {
         case roomLevel <= 3:
             harvesterNum = 6;
-            harvesterGenerateMode = "Auto";
+            generateMode = "Auto";
             break;
         case roomLevel <= 5:
             harvesterNum = 4;
-            harvesterGenerateMode = "Auto";
+            generateMode = "Auto";
             break;
         case roomLevel <= 8:
             harvesterNum = 2;
-            harvesterGenerateMode = "Config";
+            generateMode = "Config";
             break;
     }
     while (harvesterNum > 0) {
-        let harvesterName = `Harvester-${room.name}-${harvesterNum}`;
-        let harvestData = new CreepData().initData(harvesterName, "Harvester", harvesterGenerateMode, room.name);
-        creepDataMap.set(harvesterName, harvestData);
+        const harvesterName = `Harvester-${room.name}-${harvesterNum}`;
+        const harvestData = new CreepData().initData(harvesterName, "Harvester", generateMode, room.name);
+        creepDataList.set(harvesterName, harvestData);
         harvesterNum--;
     }
-    return creepDataMap;
+    return creepDataList;
 }
 
+function getUpgraderList(room, creepDataList) {
+    const roomLevel = room.controller.level;
+    //根据房间等级生成的 Upgrader 数量
+    let upgraderNum;
+    //Upgrader 生成方式
+    let generateMode;
+    switch (true) {
+        case roomLevel <= 3:
+            upgraderNum = 5;
+            generateMode = "Auto";
+            break;
+        case roomLevel <= 5:
+            upgraderNum = 2;
+            generateMode = "Auto";
+            break;
+        case roomLevel <= 8:
+            upgraderNum = 1;
+            generateMode = "Config";
+            break;
+    }
+    while (upgraderNum > 0) {
+        const upgraderName = `Upgrader-${room.name}-${upgraderNum}`;
+        const upgraderData = new CreepData().initData(upgraderName, "Upgrader", generateMode, room.name);
+        creepDataList.set(upgraderName, upgraderData);
+        upgraderNum--;
+    }
+    return creepDataList;
+}
+
+function getBuilderList(room, creepDataList) {
+    const builderName = `Builder-${room.name}-1`;
+    let builderData = new CreepData().initData(builderName, "Builder", "Auto", room.name);
+    creepDataList.set(builderName, builderData);
+    global.database.roomData.get(room.name).builder = builderName;
+    return creepDataList;
+}
 
 module.exports = {
     generate: generate

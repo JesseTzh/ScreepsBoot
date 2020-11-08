@@ -5,8 +5,7 @@ module.exports = ({
     // 采集能量矿
     source: creep => {
         // TODO 完善采集目标安排方式
-        creep.room.memory.Harvester != 0 ? creep.room.memory.Harvester = 0 : creep.room.memory.Harvester = 1;
-        let source = Game.getObjectById(creep.room.getSourceList()[creep.room.memory.Harvester]);
+        let source = Game.getObjectById(creep.room.getSourceList()[creep.getCreepData().num % 2]);
         // TODO 判断当前能源点刷新时间较长且另一矿还有很多剩余再进行切换
         if (!source || source.energy === 0) {
             logger.info(creep.name + "找不到默认采矿点或默认采矿点为空,切换为备用矿源");
@@ -25,8 +24,7 @@ module.exports = ({
     },
     // 存储能量逻辑
     target: creep => {
-        creep.room.memory.Harvester != 0 ? creep.room.memory.Harvester = 0 : creep.room.memory.Harvester = 1;
-        let target = Game.getObjectById(creep.room.getSourceLinkList()[creep.room.memory.Harvester]);
+        let target = Game.getObjectById(creep.room.getSourceLinkList()[creep.getCreepData().num % 2]);
         //如默认储能建筑已满/不存在则存储至最近的 EXTENSION/SPAWN
         if (!target || target.store.getFreeCapacity(RESOURCE_ENERGY) < 2) {
             logger.debug(creep.name + "距离矿点最近Link不存在/已存满，转存至最近的 EXTENSION/SPAWN");
