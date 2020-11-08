@@ -6,6 +6,7 @@ const Timer = require('Timer');
 const Database = require('Database');
 const creepManager = require('creepManager');
 const tool = require('utils.tools');
+const Watcher = require('Watcher');
 
 //系统启动
 function boot() {
@@ -19,11 +20,15 @@ function boot() {
     Timer();
     //Creep管理
     creepManager.creepManager();
+
 }
 
 //系统关闭
 function end() {
+    //Watcher.beginWatch();
+
     // TODO 添加能量短缺计数器
+
     tool.test();
     logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
     //Game.cpu.generatePixel();
@@ -31,6 +36,7 @@ function end() {
 
 //系统运作
 function work() {
+
     for (let name in Game.creeps) {
         Game.creeps[name].work();
     }

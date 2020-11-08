@@ -36,21 +36,27 @@ class RoomData {
         // TODO 优化函数返回值
         this.name = roomName;
         const claimRoom = Game.rooms[this.name];
+        const roomLevel = claimRoom.controller.level;
         if (!claimRoom) {
             logger.error("无法获取房间[" + roomName + "]对应信息!");
         }
         this.sourceList = this._getSourceList(claimRoom);
-        // TODO 根据等级判断是否初始化对应数据
-        this.sourceLinkList = this._getSourceLinkList();
-        if (this.sourceList.length != this.sourceLinkList.length) {
-            logger.warn("房间[" + roomName + "]中的Source与Link无法一一对应!");
-        }
-        this.towerList = this._getTowerList(claimRoom);
-        this.controllerLink = this._getControllerLink(claimRoom);
         this.spawnList = this._getSpawnList(claimRoom);
-        this.extensionList = this._getExtensionList(claimRoom);
-        this.mineral = this._getMineral(claimRoom);
-        this.factory = this._getFactory(claimRoom);
+        if (roomLevel > 1) {
+            this.extensionList = this._getExtensionList(claimRoom);
+            if (roomLevel > 2) {
+                this.towerList = this._getTowerList(claimRoom);
+                if (roomLevel > 5) {
+                    this.sourceLinkList = this._getSourceLinkList();
+                    if (this.sourceList.length != this.sourceLinkList.length) {
+                        logger.warn("房间[" + roomName + "]中的Source与Link无法一一对应!");
+                    }
+                    this.controllerLink = this._getControllerLink(claimRoom);
+                    this.mineral = this._getMineral(claimRoom);
+                    this.factory = this._getFactory(claimRoom);
+                }
+            }
+        }
         return this;
     }
 
@@ -157,7 +163,6 @@ class RoomData {
             return null;
         }
     }
-
 
 
 }

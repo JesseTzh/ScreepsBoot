@@ -85,10 +85,6 @@ function mineMonitor() {
 }
 
 function constructionSiteMonitor() {
-    // 检测是否有对应的配置文件
-    if (!CONFIG.ROOMS_BUILDER) {
-        return
-    }
     for (let roomName in Database.getRoomArray()) {
         const room = Game.rooms[roomName];
         // TODO 添加房间过滤器，以实现对于不同房间的操控
