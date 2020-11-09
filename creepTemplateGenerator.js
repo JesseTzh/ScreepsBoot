@@ -1,5 +1,6 @@
 const logger = require('Log').getLogger("creepTemplateGenerate");
 const SYS_CONFIG = require('config.system.setting');
+
 /**
  * Creep创建模板生成类
  * 用法：
@@ -16,6 +17,7 @@ class Template {
     }
 
     static genTemplate(roomName) {
+        // TODO 根据配置文件判断 roadFlag 的值
         let template = new Template();
         //在config文件中限制了全局最高能量消耗值（较config中传入的值优先级更低）
         template.energyRemain = Game.rooms[roomName].energyAvailable <= SYS_CONFIG.MAX_CREEP_ENERGY_CONSUM ? Game.rooms[roomName].energyAvailable : SYS_CONFIG.MAX_CREEP_ENERGY_CONSUM;
@@ -26,7 +28,7 @@ class Template {
         let roadFlag = false;
         if (config && config.energyMax) {
             this.energyRemain = config.energyMax;
-            if (config.roadFlag){
+            if (config.roadFlag) {
                 roadFlag = config.roadFlag
             }
         }
@@ -51,11 +53,11 @@ class Template {
         return this.templateResult;
     }
 
-    getMoverSelfAdaptionTemplate(config){
+    getMoverSelfAdaptionTemplate(config) {
         let roadFlag = false;
         if (config && config.energyMax) {
             this.energyRemain = config.energyMax;
-            if (config.roadFlag){
+            if (config.roadFlag) {
                 roadFlag = config.roadFlag
             }
         }
