@@ -1,16 +1,5 @@
-/**
- * Creep数据
- * ------------------------------------
- *           |  1-3  |  4-5  |  6-8  |    --> Controller 等级
- * ------------------------------------
- * Harvester |   6   |   4   |   2   |
- * ------------------------------------
- * Upgrader  |   3   |   2   |   1   |   TODO 6-8级 Upgrader 数量还需测试验证
- * ------------------------------------
- * Mover     |   0   |   0   |   1   |
- * -------------------------------------
- */
 const logger = require('Log').getLogger("creepData");
+const CONFIG_CREEP_DATA = require('config.creep.data');
 
 class CreepData {
     constructor(name) {
@@ -35,8 +24,8 @@ class CreepData {
         this.role = creepRole;
         this.generateMode = generateMode;
         this.roomName = roomName;
-        if (generateMode === "config") {
-            // TODO 从 config.creep.template中获取预设的部件配置
+        if (generateMode === "Config") {
+            this.partsSet = CONFIG_CREEP_DATA[this.role].partsSet;
         }
         this.num = creepName.substr(creepName.length-1,1);
         return this;

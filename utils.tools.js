@@ -73,10 +73,17 @@ function test() {
 
 }
 
+function endLog(){
+    if(SYS_CONFIG.END_LOG){
+        logger.info("---------------------------------------------- 游戏时间: " + Game.time + " | 所用CPU: " + Game.cpu.getUsed().toFixed(2) + "----------------------------------------------")
+    }
+}
+
 module.exports = {
     roomEnergAlertyMonitor: roomEnergAlertyMonitor,
     energySourceMonitor: energySourceMonitor,
     getType: getType,
     sendEmail: sendEmail,
-    test: test
+    test: test,
+    endLog: endLog
 };

@@ -9,37 +9,25 @@
  */
 const logger = require('Log').getLogger("creepDataGenerator");
 const CreepData = require('creepData');
+const CONFIG_CREEP_DATA = require('config.creep.data');
 
 function generate(room, creepDataList) {
     creepDataList = getHarvesterList(room, creepDataList);
     creepDataList = getUpgraderList(room, creepDataList);
-    creepDataList = getBuilderList(room, creepDataList)
+    creepDataList = getBuilderList(room, creepDataList);
+    creepDataList = getMoverList(room, creepDataList);
     return creepDataList;
 }
 
 function getHarvesterList(room, creepDataList) {
-    const roomLevel = room.controller.level;
+    const creepData = CONFIG_CREEP_DATA["Upgrader"].amount[room.controller.level];
     //根据房间等级生成的 Harvester 数量
-    let harvesterNum;
+    let harvesterNum= creepData[0];
     //Harvester 生成方式
-    let generateMode;
-    switch (true) {
-        case roomLevel <= 3:
-            harvesterNum = 6;
-            generateMode = "Auto";
-            break;
-        case roomLevel <= 5:
-            harvesterNum = 4;
-            generateMode = "Auto";
-            break;
-        case roomLevel <= 8:
-            harvesterNum = 2;
-            generateMode = "Config";
-            break;
-    }
+    const generateMode = creepData[1];
     while (harvesterNum > 0) {
-        const harvesterName = `Harvester-${room.name}-${harvesterNum}`;
-        const harvestData = new CreepData().initData(harvesterName, "Harvester", generateMode, room.name);
+        let harvesterName = `Harvester-${room.name}-${harvesterNum}`;
+        let harvestData = new CreepData().initData(harvesterName, "Harvester", generateMode, room.name);
         creepDataList.set(harvesterName, harvestData);
         harvesterNum--;
     }
@@ -47,28 +35,14 @@ function getHarvesterList(room, creepDataList) {
 }
 
 function getUpgraderList(room, creepDataList) {
-    const roomLevel = room.controller.level;
+    const creepData = CONFIG_CREEP_DATA["Upgrader"].amount[room.controller.level];
     //根据房间等级生成的 Upgrader 数量
-    let upgraderNum;
+    let upgraderNum = creepData[0];
     //Upgrader 生成方式
-    let generateMode;
-    switch (true) {
-        case roomLevel <= 3:
-            upgraderNum = 5;
-            generateMode = "Auto";
-            break;
-        case roomLevel <= 5:
-            upgraderNum = 2;
-            generateMode = "Auto";
-            break;
-        case roomLevel <= 8:
-            upgraderNum = 1;
-            generateMode = "Config";
-            break;
-    }
+    let generateMode = creepData[1];
     while (upgraderNum > 0) {
-        const upgraderName = `Upgrader-${room.name}-${upgraderNum}`;
-        const upgraderData = new CreepData().initData(upgraderName, "Upgrader", generateMode, room.name);
+        let upgraderName = `Upgrader-${room.name}-${upgraderNum}`;
+        let upgraderData = new CreepData().initData(upgraderName, "Upgrader", generateMode, room.name);
         creepDataList.set(upgraderName, upgraderData);
         upgraderNum--;
     }
@@ -76,10 +50,33 @@ function getUpgraderList(room, creepDataList) {
 }
 
 function getBuilderList(room, creepDataList) {
-    const builderName = `Builder-${room.name}-1`;
-    let builderData = new CreepData().initData(builderName, "Builder", "Auto", room.name);
-    creepDataList.set(builderName, builderData);
-    global.database.roomData.get(room.name).builder = builderName;
+    const creepData = CONFIG_CREEP_DATA["Builder"].amount[room.controller.level];
+    //根据房间等级生成的 Builder 数量
+    let builderNum = creepData[0];
+    //Builder 生成方式
+    let generateMode = creepData[1];
+    while (builderNum > 0) {
+        let builderName = `Builder-${room.name}-${builderNum}`;
+        let builderData = new CreepData().initData(builderName, "Builder", generateMode, room.name);
+        creepDataList.set(builderName, builderData);
+        builderNum--;
+    }
+    //global.database.roomData.get(room.name).builder = builderName;
+    return creepDataList;
+}
+
+function getMoverList(room, creepDataList) {
+    const creepData = CONFIG_CREEP_DATA["Mover"].amount[room.controller.level];
+    //根据房间等级生成的 Mover 数量
+    let moverNum = creepData[0];
+    //Mover 生成方式
+    let generateMode = creepData[1];
+    while (moverNum > 0) {
+        let moverName = `Mover-${room.name}-${moverNum}`;
+        let moverData = new CreepData().initData(moverName, "Mover", generateMode, room.name);
+        creepDataList.set(moverName, moverData);
+        moverNum--;
+    }
     return creepDataList;
 }
 
