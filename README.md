@@ -3,7 +3,7 @@
 
 ## 介绍
 
-全新重构的Screeps代码，旨在尽量实现自适应执行与任务驱动的设计架构。
+本项目为在 [ScreepsCode](https://github.com/JesseTzh/ScreepsCode) 基础上全新重构的Screeps代码，旨在尽量实现自适应执行与任务驱动的设计架构。
 
 ## 架构设计
 
@@ -23,18 +23,19 @@
 
 ## 特色模块
 
-1.  Log 模块
+1.  [Log](./Log.js) 模块
 
-一个简单易用的 Log 调试工具，在[Log]的基础上增加了一些快速输出的便利性方法，方便快速定位问题。
+一个简单易用的 Log 调试工具，在 [Log](https://github.com/zhpjy/screeps) 的基础上增加了一些快速输出的便利性方法，方便快速定位问题。
 
-2. Database 模块
+2. [Database](./Database.js) 模块
 
 用于管理游戏中非持久性数据，例如房间、建筑、creep缓存队列等等。并在某种程度上相当于传统项目中的持久层框架，提供了访问 global 中所有数据的接口，以尽量减少直接操作缓存数据，提高系统的可读性与易维护性。
 
-3. CreepTemple 模块
+3. [creepTemplateGenerator](./creepTemplateGenerator.js) 模块
 
 根据实时的房间能量状况生成 Creep 模板，正在规划重构。
 
 ## 使用说明
 开箱即用，默认无需任何配置。
+
 系统初次运行如报错，可尝试任意修改后保存重新运行。
