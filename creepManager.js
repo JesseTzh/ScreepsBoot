@@ -8,7 +8,6 @@ function creepManager() {
     let spawnBusyList = new Set();
     for (let [name, creepTemplateConfig] of Database.getCreepData()) {
         if (!Game.creeps[name]) {
-            logger.info(name)
             //检查重生标记
             if (checkCreepRebornFlag(name)) {
                 continue;
@@ -19,21 +18,18 @@ function creepManager() {
                 //初始化模板
                 const creepTemplate = generator.genTemplate(creepTemplateConfig.roomName);
                 const template = creepTemplate.getTemplate(creepTemplateConfig);
-                const spawnName = room.getFreeSpawn().name;
-                if(!spawnName){
+                const freeSpawn = room.getFreeSpawn();
+                if (!freeSpawn) {
                     logger.info(`${room}已没有空闲 Spawn 孵化 Creep！`);
                     continue;
                 }
-                //判断 Creep所用Spawn是否正忙
-                if (spawnBusyList.has(spawnName)) {
-                    logger.info("[" + spawnName + "]正忙，无法重生 [" + name + "]");
-                    continue;
-                }
+                const spawnName = freeSpawn.name;
                 let result = Game.spawns[spawnName].spawnCreep(template, name);
                 if (result === ERR_NOT_ENOUGH_ENERGY) {
-                    spawnBusyList.add(creepTemplateConfig.spawnName);
+                    //spawnBusyList.add(creepTemplateConfig.spawnName);
                     //尝试使用自适应模板重生
-                    tryAdaptionReborn(name, creepTemplateConfig);
+                    tryAdaptionReborn(spawnName, creepTemplateConfig);
+                    return;
                 } else if (result === OK) {
                     logger.info('正在重生 : ' + name);
                     //重生失败计数归零
@@ -64,14 +60,13 @@ function checkCreepRebornFlag(name) {
 }
 
 //房间能量不足尝试使用自适应模板重生
-function tryAdaptionReborn(name, creepTemplateConfig) {
+function tryAdaptionReborn(freeSpawnName, creepTemplateConfig) {
     // Creep 所在房间
     const room = Game.rooms[creepTemplateConfig.roomName];
     // Creep 内存记忆
-    const creepMemory = Memory.creeps[name];
-    logger.info(`${room}没有足够能量重生[${name}]!`);
+    const creepMemory = Memory.creeps[creepTemplateConfig.name];
     // 如果是Mover则立刻尝试自适应重生
-    if (!isMover(name, creepTemplateConfig) && creepMemory) {
+    if (!isMover(freeSpawnName, creepTemplateConfig) && creepMemory) {
         //重生失败计数 + 1
         creepMemory.RebornFailTimes === null ? creepMemory.RebornFailTimes = 1 : creepMemory.RebornFailTimes += 1;
         // 200ticks 重生失败则采用自适应模板
@@ -82,18 +77,18 @@ function tryAdaptionReborn(name, creepTemplateConfig) {
             //     logger.warn(name + "不能使用自适应模板生成，跳过重生！");
             // }
             const spawnName = room.getFreeSpawn().name;
-            if(!spawnName){
+            if (!spawnName) {
                 logger.info(`${room}已没有空闲 Spawn 孵化 Creep！`);
-                return ;
+                return;
             }
             const tempTemplate = generator.genTemplate(room.name).getSelfAdaptionTemplate();
-            const result = Game.spawns[spawnName].spawnCreep(tempTemplate, name);
+            const result = Game.spawns[spawnName].spawnCreep(tempTemplate, creepTemplateConfig.name);
             if (result === OK) {
-                let message = name + "长时间重生失败，使用自适应模板......";
+                let message = creepTemplateConfig.name + "长时间重生失败，使用自适应模板......";
                 logger.info(message);
                 Game.notify(message);
             } else if (result !== ERR_BUSY) {
-                let message = `${name}使用自适应模板重生出错，错误代码:[${result}]`
+                let message = `${creepTemplateConfig.name}使用自适应模板重生出错，错误代码:[${result}]`
                 logger.info(message);
                 Game.notify(message);
             }
@@ -102,11 +97,11 @@ function tryAdaptionReborn(name, creepTemplateConfig) {
 }
 
 //判断 Creep 是否为 Mover 并尝试使用自适应模板重生
-function isMover(name, creepTemplateConfig) {
+function isMover(freeSpawnName, creepTemplateConfig) {
     let flag = false;
-    if (name.search("Mover") !== -1) {
-        let template = generator.genTemplate(creepTemplateConfig.roomName).getMoverSelfAdaptionTemplate();
-        const result = Game.spawns[creepTemplateConfig.spawnName].spawnCreep(template, name);
+    if (creepTemplateConfig.name.search("Mover") !== -1) {
+        const template = generator.genTemplate(creepTemplateConfig.roomName).getMoverSelfAdaptionTemplate();
+        const result = Game.spawns[freeSpawnName].spawnCreep(template, creepTemplateConfig.name);
         if (result === OK) {
             let message = `[${name}]已使用自适应模板重生！\n,自适应模板为：${template}`;
             logger.info(message);
@@ -114,7 +109,7 @@ function isMover(name, creepTemplateConfig) {
             flag = true;
             //重生失败计数归零
             Memory.creeps[name].RebornFailTimes = 0;
-        } else if (result !== ERR_BUSY) {
+        } else {
             let message = `${name}使用自适应模板重生出错，错误代码:[${result}]`;
             logger.info(message);
             Game.notify(message);

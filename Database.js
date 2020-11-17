@@ -93,6 +93,14 @@ class Database {
         global.database.creepData = dataMap;
     }
 
+    static getLastLog() {
+        return global.database.lastLog;
+    }
+
+    static setNewestLog(log){
+        global.database.lastLog = log;
+    }
+
     static getCreepData(name) {
         if (!Database.checkDatabaseStatus()) {
             return null;

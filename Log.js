@@ -10,7 +10,7 @@
  *        logger.info("a");
  *        logger.warn("a","b");
  */
-const SYS_CONFIG = require('config.system.setting')
+const SYS_CONFIG = require('config.system.setting');
 
 class Logger {
     constructor() {
@@ -36,7 +36,13 @@ class Logger {
     }
 
     _log(level, messages) {
+        if (global.database && global.database.lastLog && global.database.lastLog === messages) {
+            return;
+        }
         if (this._canLog(this.LEVEL.get(level.trim()))) {
+            if (global.database) {
+                global.database.lastLog = messages;
+            }
             console.log("[" + level + "][" + this.name + "]", messages.join(" "));
         }
     }
