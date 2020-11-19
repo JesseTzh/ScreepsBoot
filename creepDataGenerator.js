@@ -20,7 +20,7 @@ function generate(room, creepDataList) {
 }
 
 function getHarvesterList(room, creepDataList) {
-    const creepData = CONFIG_CREEP_DATA["Upgrader"].amount[room.controller.level];
+    const creepData = CONFIG_CREEP_DATA["Harvester"].amount[room.controller.level];
     //根据房间等级生成的 Harvester 数量
     let harvesterNum= creepData[0];
     //Harvester 生成方式
