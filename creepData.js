@@ -24,8 +24,8 @@ class CreepData {
         this.role = creepRole;
         this.generateMode = generateMode;
         this.roomName = roomName;
-        if (generateMode === "Config") {
-            this.partsSet = CONFIG_CREEP_DATA[this.role].partsSet;
+        if (generateMode !== "Auto") {
+            this.partsSet = CONFIG_CREEP_DATA[this.role].partsSet[generateMode];
         }
         this.num = creepName.substr(creepName.length-1,1);
         return this;
