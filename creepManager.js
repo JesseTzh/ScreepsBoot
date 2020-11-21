@@ -4,7 +4,6 @@ const generator = require('creepTemplateGenerator');
 
 function creepManager() {
     //存储本 Tick 内正忙的 Spawn
-    // TODO 重写判断是否有空闲 Spawn 方法
     let spawnBusyList = new Set();
     for (let [name, creepTemplateConfig] of Database.getCreepData()) {
         if (!Game.creeps[name]) {
@@ -69,7 +68,7 @@ function tryAdaptionReborn(freeSpawnName, creepTemplateConfig) {
     if (!isMover(freeSpawnName, creepTemplateConfig) && creepMemory) {
         //重生失败计数 + 1
         creepMemory.RebornFailTimes === null ? creepMemory.RebornFailTimes = 1 : creepMemory.RebornFailTimes += 1;
-        logger.info(`[${creepTemplateConfig.name}]第[creepMemory.RebornFailTimes]重生失败！`)
+        logger.info(`[${creepTemplateConfig.name}]第[${creepMemory.RebornFailTimes}] Tick 重生失败！`)
         // 200ticks 重生失败则采用自适应模板
         if (creepMemory.RebornFailTimes > 200) {
             // TODO 更优雅的方式判断是否可以使用自动生成模板
@@ -104,7 +103,7 @@ function isMover(freeSpawnName, creepTemplateConfig) {
             Game.notify(message);
             flag = true;
             //重生失败计数归零
-            Memory.creeps[name].RebornFailTimes = 0;
+            Memory.creeps[creepTemplateConfig.name].RebornFailTimes = 0;
         } else {
             let message = `${name}使用自适应模板重生出错，错误代码:[${result}]`;
             logger.info(message);

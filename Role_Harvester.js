@@ -8,7 +8,7 @@ module.exports = ({
         let source = Game.getObjectById(creep.room.getSourceList()[creep.getCreepData().num % 2]);
         // TODO 判断当前能源点刷新时间较长且另一矿还有很多剩余再进行切换
         if (!source || source.energy === 0) {
-            logger.info(creep.name + "找不到默认采矿点或默认采矿点为空,切换为备用矿源");
+            logger.debug(creep.name + "找不到默认采矿点或默认采矿点为空,切换为备用矿源");
             source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         }
         if ((source && source.energy > 0)) {
