@@ -13,7 +13,7 @@ module.exports = ({
             logger.debug(creep.name + "尝试从Storage中提取能量");
             source = creep.room.storage;
             //冗余储能建筑也为空，若在配置文件中允许，则从 EXTENSION/SPAWN 提取能量
-            if (!source || source.store.getUsedCapacity(RESOURCE_ENERGY) < 1) {
+            if ((!source || source.store.getUsedCapacity(RESOURCE_ENERGY) < 1) && creep.room.getRatioOfEnergy() > 0.5) {
                 logger.debug(creep.name + "尝试从 EXTENSION/SPAWN 获取");
                 source = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: (structure) => {
