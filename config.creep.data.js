@@ -18,7 +18,7 @@ module.exports = {
      *   Upgrader 配置文件
      */
     Upgrader: {
-        partsSet: [[[WORK, 10], [MOVE, 6], [CARRY, 2]]],
+        partsSet: [[[WORK, 8], [MOVE, 5], [CARRY, 2]]],
         amount: [[5, "Auto"], [5, "Auto"], [5, "Auto"], [3, "Auto"], [3, "Auto"], [3, 0], [2, 0], [2, 0]],
     },
 
