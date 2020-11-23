@@ -20,9 +20,9 @@ function generate(room, creepDataList) {
 }
 
 function getHarvesterList(room, creepDataList) {
-    const creepData = CONFIG_CREEP_DATA["Harvester"].amount[room.controller.level];
+    const creepData = CONFIG_CREEP_DATA["Harvester"].amount[room.controller.level - 1];
     //根据房间等级生成的 Harvester 数量
-    let harvesterNum= creepData[0];
+    let harvesterNum = creepData[0];
     //Harvester 生成方式
     const generateMode = creepData[1];
     while (harvesterNum > 0) {
@@ -35,7 +35,7 @@ function getHarvesterList(room, creepDataList) {
 }
 
 function getUpgraderList(room, creepDataList) {
-    const creepData = CONFIG_CREEP_DATA["Upgrader"].amount[room.controller.level];
+    const creepData = CONFIG_CREEP_DATA["Upgrader"].amount[room.controller.level - 1];
     //根据房间等级生成的 Upgrader 数量
     let upgraderNum = creepData[0];
     //Upgrader 生成方式
@@ -50,7 +50,7 @@ function getUpgraderList(room, creepDataList) {
 }
 
 function getBuilderList(room, creepDataList) {
-    const creepData = CONFIG_CREEP_DATA["Builder"].amount[room.controller.level];
+    const creepData = CONFIG_CREEP_DATA["Builder"].amount[room.controller.level - 1];
     //根据房间等级生成的 Builder 数量
     let builderNum = creepData[0];
     //Builder 生成方式
@@ -66,7 +66,7 @@ function getBuilderList(room, creepDataList) {
 }
 
 function getMoverList(room, creepDataList) {
-    const creepData = CONFIG_CREEP_DATA["Mover"].amount[room.controller.level];
+    const creepData = CONFIG_CREEP_DATA["Mover"].amount[room.controller.level - 1];
     //根据房间等级生成的 Mover 数量
     let moverNum = creepData[0];
     //Mover 生成方式

@@ -10,7 +10,7 @@ module.exports = {
      *   Harvester配置文件
      */
     Harvester: {
-        partsSet: [[[WORK, 10], [MOVE, 6], [CARRY, 2]],[]],
+        partsSet: [[[WORK, 10], [MOVE, 6], [CARRY, 2]], []],
         amount: [[6, "Auto"], [6, "Auto"], [6, "Auto"], [4, "Auto"], [4, "Auto"], [2, 0], [2, 0], [2, 0], [2, 0]],
     },
 
@@ -18,8 +18,8 @@ module.exports = {
      *   Upgrader 配置文件
      */
     Upgrader: {
-        partsSet: [[[WORK, 8], [MOVE, 5], [CARRY, 2]]],
-        amount: [[5, "Auto"], [5, "Auto"], [5, "Auto"], [3, "Auto"], [3, "Auto"], [3, 0], [2, 0], [2, 0]],
+        partsSet: [[[WORK, 8], [MOVE, 5], [CARRY, 2]], [[WORK, 15], [MOVE, 9], [CARRY, 3]]],
+        amount: [[5, "Auto"], [5, "Auto"], [5, "Auto"], [3, "Auto"], [3, "Auto"], [3, 0], [2, 0], [1, 1]],
     },
 
     /**
