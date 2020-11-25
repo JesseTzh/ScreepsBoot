@@ -17,7 +17,7 @@ function creepManager() {
                 const creepTemplate = generator.genTemplate(creepTemplateConfig.roomName);
                 const template = creepTemplate.getTemplate(creepTemplateConfig);
 
-                const freeSpawn = room.getFreeSpawn();
+                const freeSpawn = room.getFreeSpawn(spawnBusyList);
                 if (!freeSpawn) {
                     logger.info(`${room}已没有空闲 Spawn 孵化 Creep！`);
                     continue;
