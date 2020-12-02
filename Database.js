@@ -14,6 +14,7 @@ const creepDataGenerator = require('creepDataGenerator');
 
 class Database {
 
+    //检测数据库是否需要刷新
     static checkDatabaseFlag(creepName, room) {
         if (!Database.checkDatabaseStatus()) {
             global.database = new Map();
@@ -26,6 +27,7 @@ class Database {
         }
     }
 
+    //初始化 Creep 数据库
     initCreepData() {
         logger.info("正在初始化Creep库...");
         let creepDataList = new Map();
@@ -41,6 +43,7 @@ class Database {
         Database.setCreepDataFlag(true);
     }
 
+    //初始化 Room 数据库
     initRoomData() {
         logger.info("正在初始化Room数据库...");
         //获取房间列表
@@ -74,6 +77,7 @@ class Database {
         }
     }
 
+    //获取房间列表
     static getRoomArray() {
         if (!Database.checkDatabaseStatus()) {
             return null;
@@ -81,10 +85,12 @@ class Database {
         return global.database.roomArray;
     }
 
+    //更改 Creep 数据库状态
     static setCreepDataFlag(flag) {
         global.database.creepDataFlag = flag;
     }
 
+    //更改 Room 数据库状态
     static setRoomDataFlag(flag) {
         global.database.roomDataFlag = flag;
     }
@@ -101,6 +107,7 @@ class Database {
         global.database.lastLog = log;
     }
 
+    //获取指定 Creep 的数据
     static getCreepData(name) {
         if (!Database.checkDatabaseStatus()) {
             return null;
@@ -111,6 +118,7 @@ class Database {
         return global.database.creepData.get(name);
     }
 
+    //获取指定 Room 的数据
     static getRoomData(name) {
         if (!Database.checkDatabaseStatus()) {
             return null;
